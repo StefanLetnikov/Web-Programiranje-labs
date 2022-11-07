@@ -1,4 +1,4 @@
-package mk.finki.ukim.mk.lab.web;
+package mk.finki.ukim.mk.lab.web.servlets;
 
 
 import org.thymeleaf.context.WebContext;

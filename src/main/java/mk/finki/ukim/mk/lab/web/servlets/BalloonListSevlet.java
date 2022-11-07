@@ -1,4 +1,5 @@
-package mk.finki.ukim.mk.lab.web;
+package mk.finki.ukim.mk.lab.web.servlets;
+
 
 import mk.finki.ukim.mk.lab.model.Order;
 import mk.finki.ukim.mk.lab.service.BalloonService;
@@ -11,29 +12,36 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Random;
 
-@WebServlet(name = "select-balloon-servlet", urlPatterns = "/selectBalloon")
-public class SelectBalloonServlet extends HttpServlet {
+@WebServlet(name="baloon-servlet", urlPatterns = "/servlet/ballonns")
+public class BalloonListSevlet extends HttpServlet {
 
     private final SpringTemplateEngine springTemplateEngine;
+    private final BalloonService balloonService;
 
-    public SelectBalloonServlet(SpringTemplateEngine springTemplateEngine) {
+
+    public BalloonListSevlet(SpringTemplateEngine springTemplateEngine, BalloonService balloonService) {
         this.springTemplateEngine = springTemplateEngine;
+        this.balloonService = balloonService;
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
         WebContext context = new WebContext(req,resp, req.getServletContext());
-        this.springTemplateEngine.process("selectBalloonSize.html",context,resp.getWriter());
+        context.setVariable("balloons", this.balloonService.listAll());
+        this.springTemplateEngine.process("listBalloons.html",context,resp.getWriter());
     }
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String balloonSize = req.getParameter("size");
-        Order order = (Order) req.getSession().getAttribute("order");
-        order.setBalloonSize(balloonSize);
+        String balloonColor = req.getParameter("color");
+        //kreiraj poceten order koj ke se prenesuva od eden state vo drug preku sesija
+        Order order = new Order(balloonColor,"","","");
         WebContext context = new WebContext(req,resp,req.getServletContext());
         req.getSession().setAttribute("order",order);
-        resp.sendRedirect("/BalloonOrder.do");
+        resp.sendRedirect("/selectBalloon");
     }
+
 }
