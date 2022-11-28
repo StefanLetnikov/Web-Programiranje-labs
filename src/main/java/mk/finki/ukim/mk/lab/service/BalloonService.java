@@ -12,6 +12,7 @@ public interface BalloonService {
     Optional<Balloon> findByName(String name);
     Optional<Balloon> save(String name, String description, Long manufacturerId);
     void deleteById(Long id);
+    int getCounter();
 
 }
 

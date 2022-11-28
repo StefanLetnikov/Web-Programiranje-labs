@@ -2,6 +2,7 @@ package mk.finki.ukim.mk.lab.bootstrap;
 
 import mk.finki.ukim.mk.lab.model.Balloon;
 import mk.finki.ukim.mk.lab.model.Manufacturer;
+import mk.finki.ukim.mk.lab.model.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -13,6 +14,8 @@ public class DataHolder {
 
     public static List<Balloon> balloons = new ArrayList<>();
     public static List<Manufacturer> manufacturers = new ArrayList<>();
+    public static List<Order> orderList = new ArrayList<>();
+    public static int counter;
 
     // inicijalna lista so baloni (napravena kako snimkite od auditoriiskite)!
     @PostConstruct

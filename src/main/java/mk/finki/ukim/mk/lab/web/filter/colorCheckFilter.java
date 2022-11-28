@@ -17,24 +17,38 @@ public class colorCheckFilter implements Filter {
         Filter.super.init(filterConfig);
     }
 
+//    @Override
+//    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+//
+//        HttpServletRequest request = (HttpServletRequest) servletRequest;
+//        HttpServletResponse response = (HttpServletResponse) servletResponse;
+//
+//
+//        Order order = (Order) request.getSession().getAttribute("order");
+//        String path = request.getServletPath();
+//
+//        //prenasoci gi site koi nemaat izbrano boja na balonot vo prviot cekor
+//        //if(!"/ballonns".equals(path) && order==null){
+//        if(!"/balloons".equals(path) && order==null){
+//            response.sendRedirect("/balloons");
+//        }else{
+//            filterChain.doFilter(servletRequest,servletResponse);
+//        }
+//
+//    }
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-
         Order order = (Order) request.getSession().getAttribute("order");
+
         String path = request.getServletPath();
 
-        //prenasoci gi site koi nemaat izbrano boja na balonot vo prviot cekor
-        //if(!"/ballonns".equals(path) && order==null){
-        if(!"/balloons".equals(path) && order==null){
+        if(!path.contains("/balloons") && order == null)
             response.sendRedirect("/balloons");
-        }else{
+        else
             filterChain.doFilter(servletRequest,servletResponse);
-        }
-
     }
 
     @Override

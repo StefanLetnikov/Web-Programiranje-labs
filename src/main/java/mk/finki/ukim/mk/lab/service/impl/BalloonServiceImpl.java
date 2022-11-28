@@ -1,5 +1,6 @@
 package mk.finki.ukim.mk.lab.service.impl;
 
+import mk.finki.ukim.mk.lab.bootstrap.DataHolder;
 import mk.finki.ukim.mk.lab.exeptions.ManufacturerNotFoundExeption;
 import mk.finki.ukim.mk.lab.model.Balloon;
 import mk.finki.ukim.mk.lab.model.Manufacturer;
@@ -52,5 +53,10 @@ public class BalloonServiceImpl implements BalloonService {
     @Override
     public void deleteById(Long id) {
         this.balloonRepository.DeleteById(id);
+    }
+
+    @Override
+    public int getCounter() {
+        return DataHolder.counter;
     }
 }
