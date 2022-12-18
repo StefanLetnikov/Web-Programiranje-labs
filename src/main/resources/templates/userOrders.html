@@ -14,8 +14,6 @@
             <td th:each="order : ${orders}">
                 <th:block th:text="${order.getBalloonColor()}"></th:block>
                 <th:block th:text="${order.getBalloonSize()}"></th:block>
-                <th:block th:text="${order.getClientName()}"></th:block>
-                <th:block th:text="${order.getClientAddress()}"></th:block>
             </td>
         </tr>
     </table>

@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
-public class BalloonRepository {
+public class InMemoryBalloonRepository {
 
     //vrati ja samo listata na baloni
     public List<Balloon> findAllBalloons(){

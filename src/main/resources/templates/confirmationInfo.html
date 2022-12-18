@@ -94,22 +94,8 @@
                 Your Order Status
             </th>
         </tr>
-        <tr>
-            <td><b>Client Name </b></td>
-            <td><th:block th:text="${session.order.clientName}"></th:block></td>
-        </tr>
-        <tr>
-            <td><b>Client Address </b></td>
-            <td><th:block th:text="${session.order.clientAddress}"></th:block></td>
-        </tr>
-        <tr>
-            <td><b>Client IP Address</b></td>
-            <td><th:block th:text="${ipAddress}"></th:block></td>
-        </tr>
-        <tr>
-            <td><b>Client Browser</b></td>
-            <td><th:block th:text="${clientBrowser}"></th:block></td>
-        </tr>
+        <tr><b>Client Username </b></tr>
+        <tr th:text="${session.user.getUsername()}"></tr>
         <tr>
             <td><b>Balloon Color </b></td>
             <td><th:block th:text="${session.order.balloonColor}"></th:block></td>
@@ -117,6 +103,10 @@
         <tr>
             <td><b>Balloon Size </b></td>
             <td><th:block th:text="${session.order.balloonSize}"></th:block></td>
+        </tr>
+        <tr>
+            <td><b>Order Creation Date </b></td>
+            <td th:text="${#temporals.format(session.dateCreated, 'dd-MM-yyyy HH:mm:ss')}"></td>
         </tr>
     </table>
     <div>

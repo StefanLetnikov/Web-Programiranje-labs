@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.List;
 
 //@Controller
@@ -165,6 +166,7 @@ public class BallonnControler {
         model.addAttribute("counter",counter);
         return "listBalloons";
     }
+
     @GetMapping("/edit-balloon/{id}")
     public String getEditBalloonPage(@PathVariable Long id, Model model) {
         if(this.balloonService.findById(id).isPresent()){
@@ -201,7 +203,8 @@ public class BallonnControler {
     public String chosenColor(HttpServletRequest request, Model model)
     {
         String color = request.getParameter("color");
-        Order order = new Order(color,"","","");
+        LocalDateTime dateCreated = LocalDateTime.now();
+        Order order = new Order(color,"",dateCreated);
         request.getSession().setAttribute("order",order);
         return "selectBalloonSize";
     }
@@ -222,10 +225,9 @@ public class BallonnControler {
         String ipAddress = request.getRemoteAddr();
         String clientBrowser = request.getHeader("User-Agent");
         Order order = (Order) request.getSession().getAttribute("order");
-        order.setClientName(clientName);
-        order.setClientAddress(deliveryAddress);
         request.getSession().setAttribute("order",order);
-        orderService.placeOrder(order.getBalloonColor(),order.getBalloonSize(),order.getClientName(),order.getClientAddress());
+        LocalDateTime dateCreated = LocalDateTime.now();
+        orderService.placeOrder(order.getBalloonColor(),order.getBalloonSize(),  dateCreated);
         model.addAttribute("ipAddress",ipAddress);
         model.addAttribute("clientBrowser",clientBrowser);
         return "confirmationInfo";

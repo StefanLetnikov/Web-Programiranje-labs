@@ -1,20 +1,27 @@
 package mk.finki.ukim.mk.lab.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
+@Entity
+@Table(name = "orders")
 public class Order {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long orderId;
     private String balloonColor;
     private String balloonSize;
-    private String clientName;
-    private String clientAddress;
-    private Long orderId;
+    private LocalDateTime dateCreated;
 
-    public Order(String balloonColor, String balloonSize, String clientName, String clientAddress) {
-        this.orderId = (long) (Math.random() * 1000);
+
+    public Order(String balloonColor, String balloonSize, LocalDateTime dateCreated) {
         this.balloonColor = balloonColor;
         this.balloonSize = balloonSize;
-        this.clientName = clientName;
-        this.clientAddress = clientAddress;
+        this.dateCreated = dateCreated;
     }
 }

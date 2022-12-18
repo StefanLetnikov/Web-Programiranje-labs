@@ -4,55 +4,62 @@ import mk.finki.ukim.mk.lab.bootstrap.DataHolder;
 import mk.finki.ukim.mk.lab.exeptions.ManufacturerNotFoundExeption;
 import mk.finki.ukim.mk.lab.model.Balloon;
 import mk.finki.ukim.mk.lab.model.Manufacturer;
-import mk.finki.ukim.mk.lab.repository.BalloonRepository;
-import mk.finki.ukim.mk.lab.repository.ManufacturerRepository;
+import mk.finki.ukim.mk.lab.repository.jpa.BalloonRepository;
+import mk.finki.ukim.mk.lab.repository.jpa.ManufacturerRepository;
 import mk.finki.ukim.mk.lab.service.BalloonService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class BalloonServiceImpl implements BalloonService {
 
-    private  final BalloonRepository balloonRepository;
+    private final BalloonRepository balloonRepository;
     private final ManufacturerRepository manufacturerRepository;
 
-    public BalloonServiceImpl(BalloonRepository balloonRepository, ManufacturerRepository manufacturerRepository){
+    public BalloonServiceImpl(BalloonRepository balloonRepository, ManufacturerRepository manufacturerRepository) {
         this.balloonRepository = balloonRepository;
         this.manufacturerRepository = manufacturerRepository;
     }
 
     @Override
     public List<Balloon> listAll() {
-        return balloonRepository.findAllBalloons();
+        return balloonRepository.findAll();
     }
 
-    @Override
-    public List<Balloon> searchByNameOrDescription(String text) {
-        return balloonRepository.findAllByNameOrDescription(text);
-    }
+//    @Override
+//    public Optional<Balloon> searchByNameOrDescription(String text) {
+//        //return balloonRepository.findByNameOrDescription(text);
+//        return null;
+//    }
 
     @Override
     public Optional<Balloon> findById(Long id) {
-        return balloonRepository.findById(id);
+        //return inMemoryBalloonRepository.findById(id);
+        return null;
     }
 
     @Override
     public Optional<Balloon> findByName(String name) {
-        return balloonRepository.findByName(name);
+        //return inMemoryBalloonRepository.findByName(name);
+        return null;
     }
 
     @Override
+    @Transactional
     public Optional<Balloon> save(String name, String description, Long manufacturerId) {
         //dali da dodadam proverka i za dali postoe balonot vekje????
-        Manufacturer manufacturer = this.manufacturerRepository.findById(manufacturerId).orElseThrow(()->new ManufacturerNotFoundExeption(manufacturerId));
-        return this.balloonRepository.save(name,description,manufacturer);
+        Manufacturer manufacturer = manufacturerRepository.findById(manufacturerId)
+                .orElseThrow(() -> new ManufacturerNotFoundExeption(manufacturerId));
+        balloonRepository.deleteByName(name);
+        return Optional.of(balloonRepository.save(new Balloon(name, description, manufacturer)));
     }
 
     @Override
     public void deleteById(Long id) {
-        this.balloonRepository.DeleteById(id);
+        balloonRepository.deleteById(id);
     }
 
     @Override

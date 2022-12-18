@@ -33,8 +33,6 @@ public class BalloonOrderServlet extends HttpServlet {
         String clientName = req.getParameter("clientName");
         String deliveryAddress = req.getParameter("clientAddress");
         Order order = (Order) req.getSession().getAttribute("order");
-        order.setClientName(clientName);
-        order.setClientAddress(deliveryAddress);
         req.getSession().setAttribute("order",order);
         resp.sendRedirect("/ConfirmationInfo");
     }

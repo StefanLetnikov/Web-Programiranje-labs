@@ -34,14 +34,14 @@ public class BalloonListSevlet extends HttpServlet {
     }
 
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String balloonColor = req.getParameter("color");
-        //kreiraj poceten order koj ke se prenesuva od eden state vo drug preku sesija
-        Order order = new Order(balloonColor,"","","");
-        WebContext context = new WebContext(req,resp,req.getServletContext());
-        req.getSession().setAttribute("order",order);
-        resp.sendRedirect("/selectBalloon");
-    }
+//    @Override
+//    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        String balloonColor = req.getParameter("color");
+//        //kreiraj poceten order koj ke se prenesuva od eden state vo drug preku sesija
+//        Order order = new Order(balloonColor,"",);
+//        WebContext context = new WebContext(req,resp,req.getServletContext());
+//        req.getSession().setAttribute("order",order);
+//        resp.sendRedirect("/selectBalloon");
+//    }
 
 }
