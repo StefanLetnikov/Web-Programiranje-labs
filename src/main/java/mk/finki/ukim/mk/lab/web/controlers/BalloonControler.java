@@ -6,6 +6,7 @@ import mk.finki.ukim.mk.lab.model.Order;
 import mk.finki.ukim.mk.lab.service.BalloonService;
 import mk.finki.ukim.mk.lab.service.ManufacturerService;
 import mk.finki.ukim.mk.lab.service.OrderService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -145,13 +146,13 @@ import java.util.List;
 //import java.util.Random;
 
 @Controller
-@RequestMapping("/balloons")
-public class BallonnControler {
+@RequestMapping(value = {"/", "/balloons"})
+public class BalloonControler {
     private final BalloonService balloonService;
     private final ManufacturerService manufacturerService;
     private final OrderService orderService;
 
-    public BallonnControler(BalloonService balloonService, ManufacturerService manufacturerService, OrderService orderService) {
+    public BalloonControler(BalloonService balloonService, ManufacturerService manufacturerService, OrderService orderService) {
         this.balloonService = balloonService;
         this.manufacturerService = manufacturerService;
         this.orderService = orderService;
@@ -176,9 +177,10 @@ public class BallonnControler {
             model.addAttribute("balloon", balloon);
             return "add-balloon";
         }
-        return "redirect:/products?error=ProductNotFound";
+        return "redirect:/products?error=BalloonNotFoundException";
     }
     @GetMapping("/add-balloon")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String getAddBalloonPage(Model model)
     {
         List<Manufacturer> manufacturers = this.manufacturerService.findAll();
@@ -186,11 +188,15 @@ public class BallonnControler {
         return "add-balloon";
     }
     @PostMapping("/add")
-    public String saveBalloon(@RequestParam String name,
+    public String saveBalloon(@RequestParam(required = false) Long id,
+                              @RequestParam String name,
                               @RequestParam String description,
                               @RequestParam Long manufacturer)
     {
-        this.balloonService.save(name,description, manufacturer);
+        if (id != null)
+            balloonService.edit(id, name, description, manufacturer);
+        else
+            balloonService.save(name, description, manufacturer);
         return "redirect:/balloons";
     }
     @DeleteMapping("/delete/{id}")
@@ -227,16 +233,16 @@ public class BallonnControler {
         Order order = (Order) request.getSession().getAttribute("order");
         request.getSession().setAttribute("order",order);
         LocalDateTime dateCreated = LocalDateTime.now();
-        orderService.placeOrder(order.getBalloonColor(),order.getBalloonSize(),  dateCreated);
+        //orderService.placeOrder(order.getBalloonColor(),order.getBalloonSize(),  dateCreated);
         model.addAttribute("ipAddress",ipAddress);
         model.addAttribute("clientBrowser",clientBrowser);
         return "confirmationInfo";
     }
-    @GetMapping("/orders")
-    public String getOrdersPage(Model model)
-    {
-        List<Order> orders = orderService.listAll();
-        model.addAttribute("orders",orders);
-        return "userOrders";
-    }
+//    @GetMapping("/orders")
+//    public String getOrdersPage(Model model)
+//    {
+//        List<Order> orders = orderService.listAll();
+//        model.addAttribute("orders",orders);
+//        return "userOrders";
+//    }
 }

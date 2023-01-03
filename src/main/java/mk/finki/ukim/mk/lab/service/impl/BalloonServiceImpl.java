@@ -1,6 +1,7 @@
 package mk.finki.ukim.mk.lab.service.impl;
 
 import mk.finki.ukim.mk.lab.bootstrap.DataHolder;
+import mk.finki.ukim.mk.lab.exeptions.BalloonNotFoundException;
 import mk.finki.ukim.mk.lab.exeptions.ManufacturerNotFoundExeption;
 import mk.finki.ukim.mk.lab.model.Balloon;
 import mk.finki.ukim.mk.lab.model.Manufacturer;
@@ -37,8 +38,8 @@ public class BalloonServiceImpl implements BalloonService {
 
     @Override
     public Optional<Balloon> findById(Long id) {
-        //return inMemoryBalloonRepository.findById(id);
-        return null;
+        return balloonRepository.findById(id);
+        //return null;
     }
 
     @Override
@@ -55,6 +56,25 @@ public class BalloonServiceImpl implements BalloonService {
                 .orElseThrow(() -> new ManufacturerNotFoundExeption(manufacturerId));
         balloonRepository.deleteByName(name);
         return Optional.of(balloonRepository.save(new Balloon(name, description, manufacturer)));
+    }
+
+    @Override
+    public List<Balloon> searchByNameOrManufacturersCountry(String text) {
+        return balloonRepository.findAllByNameOrManufacturer_Country(text, text);
+    }
+
+    @Override
+    @Transactional
+    public Optional<Balloon> edit(Long id, String name, String description, Long manufacturerId) {
+        Balloon balloon = balloonRepository.findById(id)
+                .orElseThrow(() -> new BalloonNotFoundException(id));
+        Manufacturer manufacturer = manufacturerRepository.findById(manufacturerId)
+                .orElseThrow(() -> new ManufacturerNotFoundExeption(manufacturerId));
+
+        balloon.setName(name);
+        balloon.setDescription(description);
+        balloon.setManufacturer(manufacturer);
+        return Optional.of(balloonRepository.save(balloon));
     }
 
     @Override

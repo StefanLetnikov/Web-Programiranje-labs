@@ -1,121 +1,129 @@
-<!--<html xlmns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <meta charset="utf-8">-->
-<!--    <title>WP lab - Confirmation Info</title>-->
-<!--    <style type="text/css">-->
-<!--        body {-->
-<!--            width: 800px;-->
-<!--            margin: auto;-->
-<!--        }-->
-<!--        table {-->
-<!--            width:100%;-->
-<!--        }-->
-<!--        table, td, th {-->
-<!--            border: 1px solid black;-->
-<!--            padding: 3px 2px;-->
-<!--        }-->
-<!--    </style>-->
-<!--</head>-->
-<!--<body>-->
-<!--<section>-->
-<!--    <header>-->
-<!--        <h1>Balloon Order page - Order confirmation </h1>-->
-<!--    </header>-->
-<!--    <table>-->
-<!--        <tr>-->
-<!--            <th colspan="2">-->
-<!--                Your Order Status-->
-<!--            </th>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td><b>Client Name </b></td>-->
-<!--            <td><th:block th:text="${session.order.clientName}"></th:block></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td><b>Client Address </b></td>-->
-<!--            <td><th:block th:text="${session.order.clientAddress}"></th:block></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td><b>Client IP Address</b></td>-->
-<!--            <td><th:block th:text="${ipAddress}"></th:block></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td><b>Client Browser</b></td>-->
-<!--            <td><th:block th:text="${clientAgent}"></th:block></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td><b>Balloon Color </b></td>-->
-<!--            <td><th:block th:text="${session.order.balloonColor}"></th:block></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td><b>Balloon Size </b></td>-->
-<!--            <td><th:block th:text="${session.order.balloonSize}"></th:block></td>-->
-<!--        </tr>-->
-<!--    </table>-->
-<!--    <div>-->
-<!--&lt;!&ndash;        <form th:type="POST">&ndash;&gt;-->
-<!--        <a href="/">Log out</a>-->
-<!--&lt;!&ndash;            <input type="submit" th:value="Log Out">&ndash;&gt;-->
-<!--&lt;!&ndash;        </form>&ndash;&gt;-->
-<!--    </div>-->
-
-
-<!--</section>-->
-<!--</body>-->
-<!--</html>-->
-
 <!DOCTYPE html>
-<html xlmns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <title>WP lab - Confirmation Info</title>
-    <style type="text/css">
-        body {
-            width: 800px;
-            margin: auto;
-        }
-        table {
-            width:100%;
-        }
-        table, td, th {
-            border: 1px solid black;
-            padding: 3px 2px;
-        }
-    </style>
+    <meta charset="UTF-8"/>
+    <title>Confirmation Info | Balloon Shop</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
 </head>
 <body>
-<section>
-    <header>
-        <h1>Balloon Order page - Order confirmation </h1>
-    </header>
-    <table>
-        <tr>
-            <th colspan="2">
-                Your Order Status
-            </th>
-        </tr>
-        <tr><b>Client Username </b></tr>
-        <tr th:text="${session.user.getUsername()}"></tr>
-        <tr>
-            <td><b>Balloon Color </b></td>
-            <td><th:block th:text="${session.order.balloonColor}"></th:block></td>
-        </tr>
-        <tr>
-            <td><b>Balloon Size </b></td>
-            <td><th:block th:text="${session.order.balloonSize}"></th:block></td>
-        </tr>
-        <tr>
-            <td><b>Order Creation Date </b></td>
-            <td th:text="${#temporals.format(session.dateCreated, 'dd-MM-yyyy HH:mm:ss')}"></td>
-        </tr>
-    </table>
-    <div>
-        <a href="/balloons/orders">Check your orders</a>
-        <a href="/balloons">Back</a>
-        <a href="/logout">Log out</a>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">BALLOON SHOP</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+                aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarsExampleDefault">
+            <th:block sec:authorize="isAuthenticated()">
+                <form class="form-inline my-2 my-lg-0">
+                    <a class="btn btn-light btn-sm ml-3" href="/logout">
+                        <i class="fa fa-shopping-cart">Logout</i>
+                    </a>
+                </form>
+            </th:block>
+            <th:block sec:authorize="!isAuthenticated()">
+                <form class="form-inline my-2 my-lg-0">
+                    <a class="btn btn-secondary btn-sm ml-3" href="/login">Login</a>
+                </form>
+            </th:block>
+        </div>
     </div>
-
-
+</nav>
+<section class="jumbotron text-center">
+    <div class="container">
+        <h1 class="jumbotron-heading">BALLOON SHOP</h1>
+        <h3 class="jumbotron-heading">Confirmation Info</h3>
+    </div>
 </section>
+
+<div class="container mb-4">
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <!--            <tr>-->
+            <!--                <td><b>Client Username </b></td>-->
+            <!--                <td th:text="${session.user.getUsername()}"></td>-->
+            <!--            </tr>-->
+            <tr>
+                <td><b>Balloon Color </b></td>
+                <td th:text="${session.order.balloonColor}"></td>
+            </tr>
+            <tr>
+                <td><b>Balloon Size </b></td>
+                <td th:text="${session.order.balloonSize}"></td>
+            </tr>
+            <tr>
+                <td><b>Order Creation Date </b></td>
+                <td th:text="${#temporals.format(session.order.dateCreated, 'dd-MM-yyyy HH:mm:ss')}"></td>
+            </tr>
+        </table>
+    </div>
+    </br>
+    <div>
+        <form th:method="POST" th:action="@{/orders/confirm}">
+            <button type="submit" class="btn btn-block btn-dark mb-2" th:value="Confirm">Confirm</button>
+        </form>
+        <a class="btn btn-block btn-secondary" href="/logout">Logout</a>
+        <a class="btn btn-block btn-light" href="/balloons">Back</a>
+    </div>
+</div>
+
+<footer class="text-black-50 mt-xl-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-lg-4 col-xl-3">
+                <h5>About</h5>
+                <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+                <p class="mb-0">
+                    Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant
+                    impression.
+                </p>
+            </div>
+
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
+                <h5>Informations</h5>
+                <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+                <ul class="list-unstyled">
+                    <li><a href="">Link 1</a></li>
+                    <li><a href="">Link 2</a></li>
+                    <li><a href="">Link 3</a></li>
+                    <li><a href="">Link 4</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto">
+                <h5>Others links</h5>
+                <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+                <ul class="list-unstyled">
+                    <li><a href="">Link 1</a></li>
+                    <li><a href="">Link 2</a></li>
+                    <li><a href="">Link 3</a></li>
+                    <li><a href="">Link 4</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-4 col-lg-3 col-xl-3">
+                <h5>Contact</h5>
+                <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+                <ul class="list-unstyled">
+                    <li><i class="fa fa-home mr-2"></i>E Balloon shop</li>
+                    <li><i class="fa fa-envelope mr-2"></i>stefan.letnikov@students.finki.ukim.mk</li>
+                    <li><i class="fa fa-phone mr-2"></i>201563</li>
+                    <li><i class="fa fa-print mr-2"></i>201563</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
 </body>
 </html>

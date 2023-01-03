@@ -2,13 +2,44 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Home</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
 </head>
 
 <body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">BALLOON SHOP</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+                aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarsExampleDefault">
+            <th:block sec:authorize="isAuthenticated()">
+                <form class="form-inline my-2 my-lg-0">
+                    <a class="btn btn-light btn-sm ml-3" href="/logout">
+                        <i class="fa fa-shopping-cart">Logout</i>
+                    </a>
+                </form>
+            </th:block>
+            <th:block sec:authorize="!isAuthenticated()">
+                <form class="form-inline my-2 my-lg-0">
+                    <a class="btn btn-secondary btn-sm ml-3" href="/login">Login</a>
+                </form>
+            </th:block>
+        </div>
+    </div>
+</nav>
 <div class="container">
     <header>
         <h1>Welcome to our Balloon Shop App</h1>
@@ -18,7 +49,7 @@
 <main>
     <div class="container mb-5">
         <div class="row">
-<!--            <div class="col-12" th:if="${balloons.size() > 0}">-->
+            <!--            <div class="col-12" th:if="${balloons.size() > 0}">-->
             <div class="col-12">
                 <div class="table-responsive">
                     <table class="table table-striped">
@@ -30,28 +61,38 @@
                         </tr>
                         </thead>
                         <tbody>
-<!--                        ZOSTO mi gi poctruva so crveno kako da ne se tocni, a tocnoto ime od modelot se i se izvrsuvaat vo kodot kako sto treba-->
-<!--                        dopolnitelno intelisense mi ponuduva greska opcija mi nude balloons namesto ballonns-->
-                            <tr th:each="balloon : ${balloons}">
-                                <td th:text="${balloon.getName()}"></td>
-                                <td th:text="${balloon.getDescription()}"></td>
-                                <td th:text="${balloon.getManufacturer() != null}?${balloon.getManufacturer().getName()} : 'No Manufacturer'"></td>
-                                <td class="text-right">
-                                    <form th:action="@{'/balloons/delete/{id}' (id=${balloon.getId()})}" th:method="DELETE">
-                                        <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash">Delete</i></button>
+                        <!--                        ZOSTO mi gi poctruva so crveno kako da ne se tocni, a tocnoto ime od modelot se i se izvrsuvaat vo kodot kako sto treba-->
+                        <!--                        dopolnitelno intelisense mi ponuduva greska opcija mi nude balloons namesto ballonns-->
+                        <tr th:each="balloon : ${balloons}">
+                            <td th:text="${balloon.getName()}"></td>
+                            <td th:text="${balloon.getDescription()}"></td>
+                            <td th:text="${balloon.getManufacturer() != null}?${balloon.getManufacturer().getName()} : 'No Manufacturer'"></td>
+                            <td class="text-right">
+                                <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                                    <form th:action="@{'/balloons/delete/{id}' (id=${balloon.getId()})}"
+                                          th:method="DELETE">
+                                        <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash">Delete</i>
+                                        </button>
                                     </form>
-                                    <a class="btn btn-sm btn-info" th:href="@{'/balloons/edit-balloon/{id}'(id=${balloon.getId()})}"><i class="fa fa-trash">Edit</i></a>
-                                </td>
-                            </tr>
+                                </th:block>
+                                <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                                    <a class="btn btn-sm btn-info"
+                                       th:href="@{'/balloons/edit-balloon/{id}'(id=${balloon.getId()})}"><i
+                                            class="fa fa-trash">Edit</i></a>
+                                </th:block>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="col mb-3">
                 <div class="row">
-                    <div class="col-sm-12 col-md-12">
-                        <a href="/balloons/add-balloon" class="btn btn-block btn-dark">Add new Balloon</a>
-                    </div>
+                    <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                        <div class="col-sm-12 col-md-12">
+                            <a href="/balloons/add-balloon" class="btn btn-block btn-dark">Add new Balloon</a>
+                        </div>
+                    </th:block>
                 </div>
             </div>
         </div>
@@ -75,104 +116,52 @@
     </div>
 
 </main>
+<footer class="text-black-50 mt-xl-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-lg-4 col-xl-3">
+                <h5>About</h5>
+                <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+                <p class="mb-0">
+                    Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant
+                    impression.
+                </p>
+            </div>
+
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
+                <h5>Informations</h5>
+                <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+                <ul class="list-unstyled">
+                    <li><a href="">Link 1</a></li>
+                    <li><a href="">Link 2</a></li>
+                    <li><a href="">Link 3</a></li>
+                    <li><a href="">Link 4</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto">
+                <h5>Others links</h5>
+                <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+                <ul class="list-unstyled">
+                    <li><a href="">Link 1</a></li>
+                    <li><a href="">Link 2</a></li>
+                    <li><a href="">Link 3</a></li>
+                    <li><a href="">Link 4</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-4 col-lg-3 col-xl-3">
+                <h5>Contact</h5>
+                <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+                <ul class="list-unstyled">
+                    <li><i class="fa fa-home mr-2"></i>E Balloon shop</li>
+                    <li><i class="fa fa-envelope mr-2"></i>stefan.letnikov@students.finki.ukim.mk</li>
+                    <li><i class="fa fa-phone mr-2"></i>201563</li>
+                    <li><i class="fa fa-print mr-2"></i>201563</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
 </body>
 </html>
-
-
-<!--<!DOCTYPE html>-->
-<!--<html xlmns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <meta>-->
-<!--    <title>Balloon Order page - Welcome and choose a Balloon</title>-->
-<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"-->
-<!--          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
-<!--    &ndash;&gt;-->
-<!--    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"-->
-<!--            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"-->
-<!--            crossorigin="anonymous"></script>-->
-<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"-->
-<!--            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"-->
-<!--            crossorigin="anonymous"></script>-->
-<!--    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"-->
-<!--            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"-->
-<!--            crossorigin="anonymous"></script>-->
-<!--    </style>-->
-<!--</head>-->
-<!--<body>-->
-<!--<div class="container">-->
-<!--    <header>-->
-<!--        <h1>Welcome to our Balloon Shop App</h1>-->
-<!--    </header>-->
-<!--</div>-->
-
-<!--    <main>-->
-<!--        <div class="container mb-5">-->
-<!--&lt;!&ndash;            <div class="row">&ndash;&gt;-->
-<!--&lt;!&ndash;                <div class="col-12" th:if="${balloons.size() > 0}">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <div class="table-responsive">&ndash;&gt;-->
-<!--&lt;!&ndash;                        <table class="table table-striped">&ndash;&gt;-->
-<!--&lt;!&ndash;                            <thead>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <tr>&ndash;&gt;-->
-<!--&lt;!&ndash;                                <th scope="col">Ballonns</th>&ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;                                <th scope="col">Description</th>&ndash;&gt;-->
-<!--&lt;!&ndash;                                <th scope="col">Manufacturer</th>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </tr>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </thead>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <tbody>&ndash;&gt;-->
-<!--&lt;!&ndash;                                <tr th:each="balloon : ${balloons}">&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <th:block th:text="${balloon.getName()}"></th:block>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <th:block th:text="${balloon.getDescription()}"></th:block>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <th:block>&ndash;&gt;-->
-<!--&lt;!&ndash;                                        <form th:action="@{'/balloons/delete/{id}' (id=${balloon.getId()})}" th:method="DELETE">&ndash;&gt;-->
-<!--&lt;!&ndash;                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>&ndash;&gt;-->
-<!--&lt;!&ndash;                                        </form>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    </th:block>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <th:block><a th:href="@{'/balloons/edit-balloon/{id}' (id=${balloon.getId()})}"&ndash;&gt;-->
-<!--&lt;!&ndash;                                                 class="btn btn-sm btn-info">Edit</a></th:block>&ndash;&gt;-->
-<!--&lt;!&ndash;                                </tr>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </tbody>&ndash;&gt;-->
-<!--&lt;!&ndash;                        </table>&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;            </div>&ndash;&gt;-->
-<!--        <ul>-->
-<!--            <li th:each="balloon : ${balloons}">-->
-<!--                <th:block th:text="${balloon.getName()}"></th:block>-->
-<!--                <th:block th:text="${balloon.getDescription()}"></th:block>-->
-<!--                <th:block>-->
-<!--                    <form th:action="@{'/balloons/delete/{id}' (id=${balloon.getId()})}" th:method="DELETE">-->
-<!--                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>-->
-<!--                    </form>-->
-<!--                </th:block>-->
-<!--                <th:block><a th:href="@{'/balloons/edit-balloon/{id}' (id=${balloon.getId()})}"-->
-<!--                             class="btn btn-sm btn-info">Edit</a></th:block>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--        <div>-->
-<!--            <a href="/balloons/add-balloon">Add new balloon</a>-->
-<!--        </div>-->
-<!--        <form method="POST" action="/balloons/selectBalloon">-->
-<!--            <h2>Choose balloon color:</h2>-->
-<!--            <label>-->
-<!--                <input type="radio" name="color" value="Red Balloon">-->
-<!--            </label> Red Balloon<br/>-->
-<!--            <label>-->
-<!--                <input type="radio" name="color" value="Green Balloon">-->
-<!--            </label> Green Balloon<br/>-->
-<!--            <label>-->
-<!--                <input type="radio" name="color" value="Yellow Balloon">-->
-<!--            </label> Yellow Balloon<br/>-->
-<!--            <label>-->
-<!--                <input type="radio" name="color" value="Blue Balloon">-->
-<!--            </label> Blue Balloon<br/>-->
-
-<!--            <br/>-->
-<!--            <input type="submit" value="Submit">-->
-<!--        </form>-->
-<!--        <div>-->
-<!--            <th:block th:text="${counter}"></th:block>-->
-<!--        </div>-->
-<!--    </main>-->
-<!--</div>-->
-<!--</body>-->
-<!--</html>-->

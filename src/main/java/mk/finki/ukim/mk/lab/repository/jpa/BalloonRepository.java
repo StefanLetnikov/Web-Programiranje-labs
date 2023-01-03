@@ -17,4 +17,6 @@ public interface BalloonRepository extends JpaRepository<Balloon, Long> {
 
     void deleteByName(String name);
 
+    Optional<Balloon> findById(Long id);
+
 }

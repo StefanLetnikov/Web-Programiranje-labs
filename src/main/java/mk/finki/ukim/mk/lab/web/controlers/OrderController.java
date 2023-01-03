@@ -17,7 +17,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/orders")
 public class OrderController {
-
     private final OrderService orderService;
 
     public OrderController(OrderService orderService) {
@@ -32,13 +31,13 @@ public class OrderController {
         }
         List<Order> orders = orderService.listAll();
         model.addAttribute("orders", orders);
-        return "userOrders";
+        return "userOrders.html";
     }
 
     @PostMapping("/select-color")
     public String addColor(@RequestParam String color, HttpServletRequest request) {
         if (color == null || color.isEmpty()) {
-            // TODO: Select color exception
+
         }
         request.getSession().setAttribute("color", color);
         return "selectBalloonSize";
@@ -47,10 +46,12 @@ public class OrderController {
     @PostMapping("/select-size")
     public String addSize(@RequestParam String size, HttpServletRequest request) {
         if (size == null || size.isEmpty()) {
-            // TODO: Select size exception
+
         }
-        request.getSession().setAttribute("size", size);
-        return "selectBalloonDate";
+        Order order = (Order) request.getSession().getAttribute("order");
+        order.setBalloonSize(size);
+        //request.getSession().setAttribute("size", size);
+        return "deliveryInfo";
     }
 
     @PostMapping("/select-date")
@@ -61,10 +62,8 @@ public class OrderController {
 
     @PostMapping("/confirm")
     public String confirm(HttpServletRequest request, Model model) {
-        String balloonColor = (String) request.getSession().getAttribute("color");
-        String balloonSize = (String) request.getSession().getAttribute("size");
-        LocalDateTime dateCreated = (LocalDateTime) request.getSession().getAttribute("dateCreated");
-        orderService.placeOrder(balloonColor, balloonSize, dateCreated);
+        Order order = (Order) request.getSession().getAttribute("order");
+        orderService.placeOrder(order.getBalloonColor(), order.getBalloonSize(), order.getDateCreated());
         return "redirect:/orders";
     }
 
@@ -74,7 +73,7 @@ public class OrderController {
                                Model model) {
         List<Order> orders = orderService.findAllByFilterDate(dateFrom, dateTo);
         model.addAttribute("orders", orders);
-        return "userOrders";
+        return "userOrders.html";
     }
 
 }
